@@ -1,0 +1,123 @@
+Description: Fixed lintian warning: embedded-javascript-library 
+ Fixed lintian warning for node-config: embedded-javascript-library usr/share/nodejs/config/async.js please use libjs-async
+ by renaming async.js to asyncConfig.js 
+ .
+ node-config (3.3.9-1) UNRELEASED; urgency=medium
+ .
+   * New upstream version 3.3.9
+Author: Godwin Nweke <nwekegodwin65@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout https://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: (upstream|backport|vendor|other), (<patch-url>|commit:<commit-id>)
+Bug: <upstream-bugtracker-url>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: (no|not-needed|<patch-forwarded-url>)
+Applied-Upstream: <version>, (<commit-url>|commit:<commid-id>)
+Reviewed-By: <name and email of someone who approved/reviewed the patch>
+Last-Update: 2023-11-03
+
+--- /dev/null
++++ node-config-3.3.9/asyncConfig.js
+@@ -0,0 +1,70 @@
++var asyncSymbol = Symbol('asyncSymbol');
++var deferConfig = require('./defer').deferConfig;
++
++/**
++ * @param promiseOrFunc   the promise will determine a property's value once resolved
++ *                        can also be a function to defer which resolves to a promise
++ * @returns {Promise}     a marked promise to be resolve later using `resolveAsyncConfigs`
++ */
++function asyncConfig(promiseOrFunc) {
++  if (typeof promiseOrFunc === 'function') {  // also acts as deferConfig
++    return deferConfig(function (config, original) {
++      var release;
++      function registerRelease(resolve) { release = resolve; }
++      function callFunc() { return promiseOrFunc.call(config, config, original); }
++      var promise = asyncConfig(new Promise(registerRelease).then(callFunc));
++      promise.release = release;
++      return promise;
++    });
++  }
++  var promise = promiseOrFunc;
++  promise.async = asyncSymbol;
++  promise.prepare = function(config, prop, property) {
++    if (promise.release) {
++      promise.release();
++    }
++    return function() {
++      return promise.then(function(value) {
++        Object.defineProperty(prop, property, {value: value});
++      });
++    };
++  };
++  return promise;
++}
++
++/**
++ * Do not use `config.get` before executing this method, it will freeze the config object
++ * @param config    the main config object, returned from require('config')
++ * @returns {Promise<config>}   once all promises are resolved, return the original config object
++ */
++function resolveAsyncConfigs(config) {
++  var promises = [];
++  var resolvers = [];
++  (function iterate(prop) {
++    var propsToSort = [];
++    for (var property in prop) {
++      if (Object.hasOwnProperty.call(prop, property) && prop[property] != null) {
++        propsToSort.push(property);
++      }
++    }
++    propsToSort.sort().forEach(function(property) {
++      if (prop[property].constructor === Object) {
++        iterate(prop[property]);
++      }
++      else if (prop[property].constructor === Array) {
++        prop[property].forEach(iterate);
++      }
++      else if (prop[property] && prop[property].async === asyncSymbol) {
++        resolvers.push(prop[property].prepare(config, prop, property));
++        promises.push(prop[property]);
++      }
++    });
++  })(config);
++  return Promise.all(promises).then(function() {
++    resolvers.forEach(function(resolve) { resolve(); });
++    return config;
++  });
++}
++
++module.exports.asyncConfig = asyncConfig;
++module.exports.resolveAsyncConfigs = resolveAsyncConfigs;
+--- node-config-3.3.9.orig/test/15-async-configs.js
++++ node-config-3.3.9/test/15-async-configs.js
+@@ -1,6 +1,6 @@
+ var requireUncached = require('./_utils/requireUncached');
+ 
+-var resolveAsyncConfigs = require('../async').resolveAsyncConfigs;
++var resolveAsyncConfigs = require('../asyncConfig').resolveAsyncConfigs;
+ 
+ // Test declaring async values.
+ 
+--- node-config-3.3.9.orig/test/15-config/default.js
++++ node-config-3.3.9/test/15-config/default.js
+@@ -1,5 +1,5 @@
+ 
+-var asyncConfig = require('../../async').asyncConfig;
++var asyncConfig = require('../../asyncConfig').asyncConfig;
+ 
+ var config = {
+   siteTitle : 'Site title',
+--- node-config-3.3.9.orig/test/15-config/local.js
++++ node-config-3.3.9/test/15-config/local.js
+@@ -1,4 +1,4 @@
+-var asyncConfig = require('../../async').asyncConfig;
++var asyncConfig = require('../../asyncConfig').asyncConfig;
+ 
+ var config = {
+   siteTitle : 'New Instance!',

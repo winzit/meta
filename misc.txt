@@ -1,0 +1,15 @@
+sudo nano /var/lib/dpkg/statoverride
+
+sudo usermod -aG sudo codespace
+
+echo "codespace ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /srv/chroot/debian-sid/etc/sudoers
+
+echo "codespace ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /srv/chroot/unstable-amd64-sbuild/etc/sudoers
+
+echo "deb-src http://deb.debian.org/debian sid main" | sudo tee -a /etc/apt/sources.list
+
+git config --global user.email "nwekegodwin65@gmail.com"
+git config --global user.name "Godwin Nweke"
+git config --global core.editor "/usr/bin/micro"
+
+sudo apt install micro --install-suggests --install-recommends

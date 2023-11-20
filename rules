@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+%:
+	dh $@
+
+override_dh_installchangelogs:
+	dh_installchangelogs -k History.md
+
+# Add this target for Node.js-specific tasks
+override_dh_nodejs:
+	dh_nodejs
+	# Remove the async.js file from the installed package
+	rm -f $(CURDIR)/debian/node-config/usr/share/nodejs/config/async.js

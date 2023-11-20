@@ -1,0 +1,68 @@
+node-config (3.3.9-2) unstable; urgency=medium
+
+  * Team upload
+  * Lintian override removed: mismatched override warning
+  * Renamed async.js to async-config-helper.js to resolve lintian warning
+
+ -- Godwin Nweke <nwekegodwin65@gmail.com>  Tue, 07 Nov 2023 20:39:25 +0000
+
+node-config (3.3.9-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream version 3.3.9
+  * Updated description for `remove-unpackaged-parsers` patch
+  * Update standards version to 4.6.2, no changes needed.
+
+ -- Godwin Nweke <nwekegodwin65@gmail.com>  Tue, 07 Nov 2023 19:42:20 +0000
+
+node-config (3.3.8-1) unstable; urgency=medium
+
+  * Team upload
+  * Update standards version to 4.6.1, no changes needed.
+  * New upstream version 3.3.8
+  * Refresh patches
+
+ -- Yadd <yadd@debian.org>  Tue, 01 Nov 2022 08:46:59 +0100
+
+node-config (3.3.7-2) unstable; urgency=medium
+
+  * Team upload
+  * Drop test that require an old ts-node (Closes: #1008509)
+
+ -- Yadd <yadd@debian.org>  Tue, 29 Mar 2022 09:09:31 +0200
+
+node-config (3.3.7-1) unstable; urgency=medium
+
+  * New upstream version 3.3.7
+  * Watching GitHub tags instead of HEAD.
+  * Bumping copyright years.
+
+ -- Andrius Merkys <merkys@debian.org>  Sun, 16 Jan 2022 04:08:27 -0500
+
+node-config (3.3.6.9.g98f2fc9-3) unstable; urgency=medium
+
+  * No-changes source-only upload.
+
+ -- Andrius Merkys <merkys@debian.org>  Mon, 03 Jan 2022 08:26:11 -0500
+
+node-config (3.3.6.9.g98f2fc9-2) unstable; urgency=medium
+
+  [ Yadd ]
+  * Bump debhelper from old 11 to 13.
+  * Set upstream metadata fields: Bug-Submit.
+  * Remove obsolete fields Contact, Name from debian/upstream/metadata
+    (already present in machine-readable debian/copyright).
+  * Add "Rules-Requires-Root: no"
+  * Add debian/gbp.conf
+  * Use dh-sequence-nodejs instead of pkg-js-tools
+  * Drop nodejs dependency
+  * Fix autopkgtest
+  * Fix copyright
+
+ -- Andrius Merkys <merkys@debian.org>  Mon, 13 Dec 2021 01:24:27 -0500
+
+node-config (3.3.6.9.g98f2fc9-1) unstable; urgency=medium
+
+  * Initial release (Closes: #1000141)
+
+ -- Andrius Merkys <merkys@debian.org>  Thu, 18 Nov 2021 11:03:44 -0500

@@ -1,0 +1,5 @@
+export DEBEMAIL=nwekegodwin65@gmail.com
+export DEBFULLNAME='Godwin Nweke'
+alias lintian='lintian -iIEcv --pedantic --color auto'
+alias git-import-dsc='git-import-dsc --author-is-committer --pristine-tar'
+alias clean='fakeroot debian/rules clean'
