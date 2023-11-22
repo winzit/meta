@@ -20,4 +20,6 @@ git config --global core.editor "/usr/bin/micro"
 cat /etc/debian_version
 
 apt install devscripts git git-buildpackage lintian lintian-brush
-
+apt-get install debhelper
+apt-get install dh-sequence-nodejs
+apt-get install nodejs npm

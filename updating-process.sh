@@ -13,25 +13,25 @@ alias git-import-dsc='git-import-dsc --author-is-committer --pristine-tar'
 alias clean='fakeroot debian/rules clean'
 
 
-mkdir explorercanvas-container
-cd explorercanvas-container
-gbp clone --pristine-tar git@salsa.debian.org:js-team/explorercanvas.git 
+mkdir node-cookie-container
+cd node-cookie-container
+gbp clone --pristine-tar git@salsa.debian.org:mr.winz/node-cookie.git 
 
 #Using git to clone instead of gbp
-git clone git@salsa.debian.org:js-team/explorercanvas.git 
+git clone git@salsa.debian.org:js-team/node-cookie.git 
 git checkout upstream 
 git checkout pristine-tar 
 git checkout master 
 
 #Next cd into the directory and download the new upstream release tarball using the command:
-cd explorercanvas
+cd node-cookie
 uscan --verbose
 
 #Get the source from previous version incase you don't have the debian dir.. you can then copy from previous and modify
 #apt source node-yaml
 
 #If you used uscan to download the tarballs you should see a tarball named package-name_upstream-version.orig.tar.gz in the directory, you cloned the repo in. Import the orig.tar.gz using:
-gbp import-orig --pristine-tar ../explorercanvas_3.3.9.orig.tar.gz
+gbp import-orig --pristine-tar ../node-cookie_3.3.9.orig.tar.gz
 #../node-yaml_2.3.3.orig.tar.gz 
 #
 
@@ -51,7 +51,7 @@ gbp dch -a
 ########################################################################
 
 #Install build dependency 
-sudo apt build-dep explorercanvas 
+sudo apt build-dep node-cookie 
 
 #Now we build. Run:
 dpkg-buildpackage
@@ -95,12 +95,12 @@ sbuild
 dch -r -D experimental 
 
 git remote -v
-git remote set-url origin git@salsa.debian.org:mr.winz/explorercanvas.git 
+git remote set-url origin git@salsa.debian.org:mr.winz/node-cookie.git 
 git push -u --all --follow-tags
 
 #Create merge request for forwarding patches to upstream
-https://salsa.debian.org/mr.winz/explorercanvas/-/merge_requests/new?merge_request%5Bsource_branch%5D=upstream%2Flatest
+https://salsa.debian.org/mr.winz/node-cookie/-/merge_requests/new?merge_request%5Bsource_branch%5D=upstream%2Flatest
 https://salsa.debian.org/mr.winz/node-yaml/-/merge_requests/new?merge_request%5Bsource_branch%5D=upstream
 
 #Create merge request for patches for 
-#https://salsa.debian.org/mr.winz/explorercanvas/-/merge_requests/new?merge_request%5Bsource_branch%5D=pristine-tar
+#https://salsa.debian.org/mr.winz/node-cookie/-/merge_requests/new?merge_request%5Bsource_branch%5D=pristine-tar

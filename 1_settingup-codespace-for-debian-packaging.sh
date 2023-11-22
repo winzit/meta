@@ -1,13 +1,14 @@
 #!/bin/sh 
 
 #Add debian and source repo
-sudo tee -a /etc/apt/sources.list << EOF
+sudo tee /etc/apt/sources.list << EOF
 deb http://deb.debian.org/debian/ bookworm main
-deb http://security.debian.org/debian-security/ bookworm-security main
-# Uncomment the following lines to enable source code repositories
+#deb http://security.debian.org/debian-security/ bookworm-security main
 deb-src http://deb.debian.org/debian/ bookworm main
-deb-src http://security.debian.org/debian-security/ bookworm-security main
-deb http://ftp.debian.org/debian stable-updates main
+deb http://ftp.us.debian.org/debian/ bookworm main
+deb-src http://ftp.us.debian.org/debian/ bookworm main
+#deb-src http://security.debian.org/debian-security/ bookworm-security main
+#deb http://ftp.debian.org/debian stable-updates main
 #deb http://archive.ubuntu.com/ubuntu bullseye-updates main
 EOF
 
@@ -25,7 +26,9 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F8D2585B8783D481
 #Update package manager
 sudo apt-get update
 sudo apt-get upgrade 
-
+sudo apt-get install debhelper
+sudo apt-get install dh-sequence-nodejs
+sudo apt-get install nodejs npm
 
 #Install micro text editor and recommedation
 sudo apt install --install-recommends --install-suggests micro

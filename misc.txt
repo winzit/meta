@@ -7,6 +7,7 @@ echo "codespace ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /srv/chroot/debian-sid/et
 echo "codespace ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /srv/chroot/unstable-amd64-sbuild/etc/sudoers
 
 echo "deb-src http://deb.debian.org/debian sid main" | sudo tee -a /etc/apt/sources.list
+echo "QUILT_PATCHES=debian/patches" | tee -a ~/.quiltrc
 
 git config --global user.email "nwekegodwin65@gmail.com"
 git config --global user.name "Godwin Nweke"
